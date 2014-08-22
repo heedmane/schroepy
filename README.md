@@ -50,7 +50,7 @@ Installation
 
 - Download (or clone) to your machine.
 
-- Rename the Makefile, for instance in Mac OS X using gcc4.2 you need rename 'Makefile_mac' to Makefile, for Linux use 'Makefile_linux'
+- Rename the Makefile, for instance in Mac OS X using gcc4.2 you need to rename 'Makefile_mac' to Makefile, for Linux use 'Makefile_linux'
 
 - Inside src/ start IPython with the option --pylab="inline" (We recommend to run the script in the IPython qtconsole)
  
