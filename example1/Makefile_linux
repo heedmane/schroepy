@@ -11,19 +11,14 @@ SRC_DIR = .
 all: 
 	echo "done!"
 
-# Ejemplo con multiples fuentes
-# pa compilar:
-#  make ./blah.so
 blah_OBJS = PMSM_FOC.o kf.o
 OBJS_WPATH = $(blah_OBJS:%.o=$(SRC_DIR)/%.o)
 
 $(LIB_DIR)/blah.so: $(OBJS_WPATH)
-	$(CC) -shared -Wl,-install_name,$@ -o $@ $^
+	$(CC) -shared -Wl,-soname,$@ -o $@ $^
 
-# La fuente consiste de un solo archivo: caca.c
-# make caca.so
 $(LIB_DIR)/%.so: $(SRC_DIR)/%.o
-	$(CC) -shared -Wl,-install_name,$@ -o $@ $<
+	$(CC) -shared -Wl,-soname,$@ -o $@ $<
 
 %.o: %.c
 	$(CC) $(INCLUDE) -c $(CCOPTS) $< $(LIBS)
