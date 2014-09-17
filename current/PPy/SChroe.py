@@ -1,8 +1,9 @@
-################
-################
-# Schroe.py v1.0
-################
-################
+#####################
+#####################
+# Schroe.py v0.5-PPy
+# Pure Python flavour
+#####################
+#####################
 #
 # https://github.com/heedmane/schroepy/
 # Licensed under GPLv2 (http://www.gnu.org/licenses/gpl-2.0.html)
@@ -15,9 +16,6 @@
 # TU Muenchen,
 # Garhing, Germany.
 # hector.martinez@tum.de
-#
-# cfunctions.c include code written by Thomas Rosenhammer
-# SClib licensed under GPL v2 https://github.com/drestebon/sclib/
 
 
 
@@ -28,109 +26,13 @@ import scipy.integrate as integrate
 import math
 from scipy.interpolate import pchip
 
-
-#######
-# SClib
-#######
-# to evaluate C functions within python
-
-import ctypes as ctypes
-import sys
-import os
-
-
-##################################################################################################################################
-##################################################################################################################################
-
-def error(message):
-	sys.stderr.write("error: %s\n" % message)
-	sys.exit(1)
-
-class SClib:
-	def __init__(self, lib_path, fnames=[]):
-        	self.lib_path = lib_path
-
-		self.lib = ctypes.CDLL(lib_path)
-		self.TYPE = [ctypes.c_int, ctypes.c_long, ctypes.c_float, ctypes.c_double, ctypes.c_longdouble]
-		self.N_INPUTS = {}
-		self.INPUT_LEN = {}
-		self.INPUT_TYPE = {}
-		self.INPUT_DTYPE = {}
-		self.N_OUTPUTS = {}
-        	self.OUTPUT_LEN = {}
-        	self.OUTPUT_TYPE = {}
-        	self.OUTPUT_DTYPE = {}
-
-        	self.fnames = []
-
-		for x in fnames:
-			if hasattr(self.lib, x):
-				self.N_INPUTS[x] = ctypes.c_int.in_dll(self.lib,"_"+x+"_N_INPUTS_").value
-				foo = (ctypes.c_int*self.N_INPUTS[x]).in_dll(self.lib,"_"+x+"_INPUT_LEN_")
-				self.INPUT_LEN[x] = [foo[i] for i in range(self.N_INPUTS[x])]
-				foo = (ctypes.c_int*self.N_INPUTS[x]).in_dll(self.lib,"_"+x+"_INPUT_TYPE_")
-				self.INPUT_TYPE[x] = [(self.TYPE[foo[i]]*self.INPUT_LEN[x][i]) for i in range(self.N_INPUTS[x])]
-				self.INPUT_DTYPE[x] = [self.TYPE[foo[i]] for i in range(self.N_INPUTS[x])]
-
-				self.N_OUTPUTS[x] = ctypes.c_int.in_dll(self.lib,"_"+x+"_N_OUTPUTS_").value
-				foo = (ctypes.c_int*self.N_OUTPUTS[x]).in_dll(self.lib,"_"+x+"_OUTPUT_LEN_")
-				self.OUTPUT_LEN[x] = [foo[i] for i in range(self.N_OUTPUTS[x])]
-				foo = (ctypes.c_int*self.N_OUTPUTS[x]).in_dll(self.lib,"_"+x+"_OUTPUT_TYPE_")
-				self.OUTPUT_TYPE[x] = [(self.TYPE[foo[i]]*self.OUTPUT_LEN[x][i]) for i in range(self.N_OUTPUTS[x])]
-				self.OUTPUT_DTYPE[x] = [self.TYPE[foo[i]] for i in range(self.N_OUTPUTS[x])]
-				self.fnames.append(x)
-			else:
-				print("__init__(): "+x+"() discarded: no symbol found")
-	def retype(self):
-		for x in self.fnames:
-			foo = (ctypes.c_int*self.N_INPUTS[x]).in_dll(self.lib,"_"+x+"_INPUT_TYPE_")
-			self.INPUT_TYPE[x] = [(self.TYPE[foo[i]]*self.INPUT_LEN[x][i]) for i in range(self.N_INPUTS[x])]
-			foo = (ctypes.c_int*self.N_OUTPUTS[x]).in_dll(self.lib,"_"+x+"_OUTPUT_TYPE_")
-			self.OUTPUT_TYPE[x] = [(self.TYPE[foo[i]]*self.OUTPUT_LEN[x][i]) for i in range(self.N_OUTPUTS[x])]
-	
-	def reload(self):
-		self.unload()
-		self.__init__(self.lib_path,self.fnames)
-	
-	def unload(self):
-		while self.isLoaded():
-			try:
-				handle = self.lib._handle
-			except:
-				error("unload(): no se pudo del self.lib")
-			libdl = ctypes.CDLL("libdl.so")
-			libdl.dlclose(handle)
-	
-	
-	def isLoaded(self):
-		libp = os.path.abspath(self.lib_path)
-		ret = os.system("lsof -p %d | grep %s > /dev/null" % (os.getpid(), libp))
-		return (ret == 0)
-	
-	def eval(self,fun,*args):
-		if not hasattr(self.lib, fun) or fun not in self.fnames:
-			error("eval(): "+fun+"() not available")
-		if(len(args)!=self.N_INPUTS[fun]):
-			error("feval("+fun+"): len(args) = {0} != N_INPUTS = {1}".format(len(args),self.N_INPUTS[fun]))
-		py = [self.OUTPUT_TYPE[fun][i]() for i in range(self.N_OUTPUTS[fun])]
-		px = [self.INPUT_TYPE[fun][i](*args[i]) for i in range(self.N_INPUTS[fun])]
-
-        	fargs = py+px
-		getattr(self.lib, fun)(*fargs)
-		return [np.frombuffer(py[i],dtype=self.OUTPUT_DTYPE[fun][i]) for i in range(self.N_OUTPUTS[fun])]
-
-
-##################################################################################################################################
-##################################################################################################################################
-
-
 #############
 # Definitions 
 #############
 
 
 h = 1.e-4   #integration step
-ERES = 1e-8 #defines the precision in the eigenvalues
+ERES = 1e-15 #defines the precision in the eigenvalues
 
 # Definition of the potential function, for instance the Cornell potential, with fixed
 # parameters if you want make the potential depend on extra parameters the other functions
@@ -216,31 +118,11 @@ def simm(x, array):
             answer.append(y)
     return answer
 
-
-# load C functions
-if __name__ == "__main__":
-    from subprocess import check_output
-	
-    libname = "cfunctions.so"
-    libpath = os.getcwd()+"/"+libname
-    functions = ['wrap']
-    try:
-	enc_lib = SClib(libpath, functions)
-    except:
-        pass
-	
-    if str(check_output(["make", libname])).find("is up to date")<0:
-	try:
-	    enc_lib.reload()
-	except:
-	    enc_lib = SClib(libpath, functions)
-
-
 ##################################################################################################################################
 ##################################################################################################################################
 
 
-print 'SChroe.py v1.0'
+print 'SChroe.py v1.5-PPy'
 print 'The potential is defined as V(r)  '
 print 'the effective potential as Veff(r,l).'
 print 'the integration step h = ' +repr(h)
@@ -254,27 +136,13 @@ print ' '
 #################
 
 
-def eigenvalueC(elow1, eup1, n, l):
-    # fast finding of the eigenvalue using a C function
-    
-    elow1 = np.array([elow1])
-    eup1 = np.array([eup1])
-    n = np.array([n])
-    l = np.array([l])
-    eig = np.longdouble(enc_lib.eval('wrap',elow1, eup1, n, l)[0][0])
-    print 'E = '+str(eig)
-    return eig
-
-
-
-
 def eigenvaluePy(elow1, eup1, n, l):
     # the following function finds the eigenvalue using Python (no C functions)
 	
     de = h*0.1
-    feh = m*ERES
-    eup = m*eup1
-    elow = m*elow1
+    feh = MM*ERES
+    eup = MM*eup1
+    elow = MM*elow1
 
     xmin=min_(l)+h
     ewidth = eup - elow
@@ -333,8 +201,8 @@ def eigenvaluePy(elow1, eup1, n, l):
 
 
 
-def wavefunction(e,l):
-    # given the eigenvalue, the following function computes the reduced wave function and return it as a NumPy array
+def wavefunctionPy(e,l):
+    # given the eigenvalue, the following function computes the reduced wave function and return it as a NumPy array using only Python code
 	
     xmin=np.longdouble(min_(l)+h)
 
@@ -383,6 +251,12 @@ def wavefunction(e,l):
     return u
 
 
+
+def solve_schroedingerPy(elow,eup,n,l):
+    #Finds the eigenvalue and then computes the wavefunction
+    eigg = np.array([eigenvaluePy(elow,eup,n,l)])
+    yyy = wavefunctionPy(eigg[0],l)
+    return eigg,yyy
 
 
 ###################

@@ -1,0 +1,29 @@
+CC = gcc
+CCOPTS = -Wall -O2 -ffast-math -fPIC -g
+
+# Do not change these:
+LIBS = -lm
+INCLUDE = -I/usr/include -I.
+LDFLAGS = -L/usr/lib
+LIB_DIR = .
+SRC_DIR = .
+
+all: 
+	echo "done!"
+
+blah_OBJS = PMSM_FOC.o kf.o
+OBJS_WPATH = $(blah_OBJS:%.o=$(SRC_DIR)/%.o)
+
+$(LIB_DIR)/blah.so: $(OBJS_WPATH)
+	$(CC) -shared -Wl,-soname,$@ -o $@ $^
+
+$(LIB_DIR)/%.so: $(SRC_DIR)/%.o
+	$(CC) -shared -Wl,-soname,$@ -o $@ $<
+
+%.o: %.c
+	$(CC) $(INCLUDE) -c $(CCOPTS) $< $(LIBS)
+
+clean:
+	rm -rf *.so *.o
+
+

@@ -1,4 +1,4 @@
-/* pa definir una funcion:
+/* to define a funcion:
 
 PYO(foo,2, 1,1);
 PYO_TYPES(foo,2, FLOAT, INT)
