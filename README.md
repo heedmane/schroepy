@@ -7,20 +7,13 @@ Licensed under GPLv2 (http://www.gnu.org/licenses/gpl-2.0.html)
 
 Python port of the Mathematica script specified in arXiv:hep-ph/9811453
 
-Author:
-
-Hector E. Martinez, 
-
+Author: Hector E. Martinez, 
 Physik-Department T30f,
-
 TU Muenchen,
-
 Garhing, Germany.
-
 hector.martinez@tum.de
 
 cfunctions.c include code written by Thomas Rosenhammer
-
 SClib licensed under GPLv2 https://github.com/drestebon/sclib/
 
 
