@@ -2,18 +2,25 @@ Schroe.py v0.5
 ==============
 
 https://github.com/heedmane/schroepy/
+
 Licensed under GPLv2 (http://www.gnu.org/licenses/gpl-2.0.html)
 
 Python port of the Mathematica script specified in arXiv:hep-ph/9811453
 
 Author:
+
 Hector E. Martinez, 
+
 Physik-Department T30f,
+
 TU Muenchen,
+
 Garhing, Germany.
+
 hector.martinez@tum.de
 
 cfunctions.c include code written by Thomas Rosenhammer
+
 SClib licensed under GPLv2 https://github.com/drestebon/sclib/
 
 
@@ -39,15 +46,17 @@ in windows it should run with no problems.
 Installation 
 ------------
 
-* Download (or clone) the current/ folder to your machine.
+Download (or clone) the current/ folder to your machine.
 
-* If you want to use the SC version inside the SC/src/ foler rename the Makefile correspondiing to your OS:
+If you want to use the SC version inside the SC/src/ foler rename the Makefile correspondiing to your OS:
 
     cp Makefile_mac Makefile
+
 or 
+
     cp Makefile_linux Makefile
 
-* Inside PPy/src/ or SC/src/ folder start IPython. It is convenient to use the option 'inline' of matplotlib to see the plots. If you run the qtconsole run with
+Inside PPy/src/ or SC/src/ folder start IPython. It is convenient to use the option 'inline' of matplotlib to see the plots. If you run the qtconsole run with
  
     ipython qtconsole --pylab="inline"
 
@@ -55,7 +64,7 @@ or inside a IPyhton notebook use the magic
 
     %matplotlib inline
 
-* Within IPython type 'run SChroe.py' This will run the script with the example potential.
+Within IPython type 'run SChroe.py' This will run the script with the example potential.
 
 
 Basic Usage 
