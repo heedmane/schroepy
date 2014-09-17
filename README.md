@@ -74,20 +74,29 @@ or
 * To only compute and store the nth (n=0,1,2,...) eigenvalue 
 
     Enl = eigenvalueC(elow,eup,n,l)
+
 or
+
     Enl = eigenvaluePy(elow,eup,n,l)
 
 The fist function is faster because uses SClib, the second one is the Python version of the same algorithm.
 
 * To calculate and store the reduced wavefunction corresponding to this eigenvalue:
+    
     ynl = wavefunctionC(Enl,l) 
+
 or  
+
     ynl = wavefunctionPy(Enl,l)
 
 * Check orthonormality:
+
     1-wfint(wfpro2(ynl,ynl)) 
+
 and 
+    
     wfint(wfpro2(ynl,yml)) 
+
 where m != n.
 
 * plotting: the function 
