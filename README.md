@@ -60,9 +60,9 @@ or inside a IPyhton notebook use the magic
 
 Basic Usage 
 -----------
-* Modify the SChroe.py and/or potential.h to define your potential, see the comments therein. 
+Modify the SChroe.py and/or potential.h to define your potential, see the comments therein. 
 
-* To calculate and store the eigenvalue and the wavefunction:
+To calculate and store the eigenvalue and the wavefunction:
 
     Enl,ynl = solve_schrodingerPy(elow,eup,n,l)
 
@@ -70,7 +70,7 @@ or
 
     Enl,ynl = solve_schrodingerC(elow,eup,n,l)
 
-* To only compute and store the nth (n=0,1,2,...) eigenvalue 
+To only compute and store the nth (n=0,1,2,...) eigenvalue 
 
     Enl = eigenvalueC(elow,eup,n,l)
 
@@ -80,7 +80,7 @@ or
 
 The fist function is faster because uses SClib, the second one is the Python version of the same algorithm.
 
-* To calculate and store the reduced wavefunction corresponding to this eigenvalue:
+To calculate and store the reduced wavefunction corresponding to this eigenvalue:
     
     ynl = wavefunctionC(Enl,l) 
 
@@ -88,7 +88,7 @@ or
 
     ynl = wavefunctionPy(Enl,l)
 
-* Check orthonormality:
+Check orthonormality:
 
     1-wfint(wfpro2(ynl,ynl)) 
 
@@ -98,7 +98,7 @@ and
 
 where m != n.
 
-* plotting: the function 
+plotting: the function 
 
     wfplot2([ynl],[xl,xf])
 
@@ -112,7 +112,7 @@ to plot it in its whole range. Also you can use
 
 to plot two or more wavefunctions.
 
-* save wavefunctions to disk with
+save wavefunctions to disk with
 
     np.save('name',ynl) 
 
@@ -120,9 +120,9 @@ load with
 
     ynl = np.load('name')
 
-* See the notebook in the example0 folder.
+See the notebook in the example1 folder.
 
-* If you want the potential to depend on more parameters than r see the notebook inside the example2 folder and the comments therein.
+If you want the potential to depend on more parameters than r see the notebook inside the example2 folder and the comments therein.
 
-* If you make changes in potential.h or cfunctions.c you may need to erase cfunctions.so
+If you make changes in potential.h or cfunctions.c you may need to erase cfunctions.so
 
