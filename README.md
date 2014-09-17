@@ -66,6 +66,7 @@ Basic Usage
     
     Enl,ynl = solve_schrodingerPy(elow,eup,n,l)
 
+
 or
 
     Enl,ynl = solve_schrodingerC(elow,eup,n,l)
