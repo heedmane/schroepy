@@ -63,9 +63,12 @@ Basic Usage
 * Modify the SChroe.py and/or potential.h to define your potential, see the comments therein. 
 
 * To calculate and store the eigenvalue and the wavefunction:
-        Enl,ynl = solve_schrodingerPy(elow,eup,n,l)
+    
+    Enl,ynl = solve_schrodingerPy(elow,eup,n,l)
+
 or
-        Enl,ynl = solve_schrodingerC(elow,eup,n,l)
+
+    Enl,ynl = solve_schrodingerC(elow,eup,n,l)
 
 
 * To only compute and store the nth (n=0,1,2,...) eigenvalue 
