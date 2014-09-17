@@ -70,7 +70,6 @@ or
 
     Enl,ynl = solve_schrodingerC(elow,eup,n,l)
 
-
 * To only compute and store the nth (n=0,1,2,...) eigenvalue 
 
     Enl = eigenvalueC(elow,eup,n,l)
@@ -100,10 +99,13 @@ and
 where m != n.
 
 * plotting: the function 
-    wfplot2([ynl],[xl,xf]) 
+
+    wfplot2([ynl],[xl,xf])
+
 plots the reduced wavefunction between xl and xf, or you can use
 
     wfplot2([ynl],-1) 
+
 to plot it in its whole range. Also you can use
 
     wfplot2([ynl,yml,...],-1)
@@ -115,6 +117,7 @@ to plot two or more wavefunctions.
     np.save('name',ynl) 
 
 load with 
+
     ynl = np.load('name')
 
 * See the notebook in the example0 folder.
