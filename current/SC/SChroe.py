@@ -240,7 +240,7 @@ if __name__ == "__main__":
 ##################################################################################################################################
 
 
-print 'SChroe.py v1.5'
+print 'SChroe.py v0.5'
 print 'The potential is defined as V(r)  '
 print 'the effective potential as Veff(r,l).'
 print 'the integration step h = ' +repr(h)
